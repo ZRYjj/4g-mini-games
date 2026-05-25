@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>四合一单机小游戏</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">本地单机 · 打开即玩</p>
+          <h1>四合一小游戏</h1>
+        </div>
+        <div class="stats" aria-live="polite">
+          <span id="moveCount">步数 0</span>
+          <span id="gameStatus">选择一个游戏开始</span>
+        </div>
+      </header>
+
+      <nav class="game-tabs" aria-label="游戏列表">
+        <button class="tab active" data-game="sudoku">数独9宫格</button>
+        <button class="tab" data-game="rush">通关大师</button>
+        <button class="tab" data-game="slide">拼来拼去</button>
+        <button class="tab" data-game="water">倒水解谜</button>
+      </nav>
+
+      <section class="game-shell">
+        <aside class="game-info">
+          <h2 id="gameTitle">数独9宫格</h2>
+          <p id="gameDesc">填入 1-9，让每一行、每一列、每个 3x3 宫都没有重复数字。</p>
+          <div class="actions">
+            <button id="newGameBtn" type="button">新一局</button>
+            <button id="resetBtn" type="button">重置</button>
+            <button id="hintBtn" type="button">提示</button>
+          </div>
+          <div class="note" id="gameNote">点击空格输入数字，完成后点“提示”会补一个格子。</div>
+        </aside>
+
+        <section class="board-wrap" id="boardWrap" aria-live="polite"></section>
+      </section>
+    </main>
+
+    <div class="win-modal" id="winModal" hidden>
+      <div class="win-backdrop"></div>
+      <section class="win-card" role="dialog" aria-modal="true" aria-labelledby="winTitle">
+        <div class="confetti" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="win-car" aria-hidden="true">🚕</div>
+        <div class="win-ribbon"><strong>WIN</strong></div>
+        <div class="win-face" aria-hidden="true">😄</div>
+        <h2 id="winTitle">通关成功</h2>
+        <p id="winText">这一局完成得漂亮。</p>
+        <button id="winCloseBtn" type="button">继续玩</button>
+      </section>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
