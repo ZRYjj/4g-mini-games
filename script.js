@@ -10,12 +10,28 @@ const ZODIACS = [
   ["射手座", "♐"], ["摩羯座", "♑"], ["水瓶座", "♒"], ["双鱼座", "♓"],
 ];
 
+const DAILY_QUOTES = [
+  "学而不思则罔，思而不学则殆。——孔子",
+  "知之者不如好之者，好之者不如乐之者。——孔子",
+  "天才是百分之一的灵感加百分之九十九的汗水。——爱迪生",
+  "不积跬步，无以至千里。——荀子",
+  "读书破万卷，下笔如有神。——杜甫",
+  "业精于勤，荒于嬉；行成于思，毁于随。——韩愈",
+  "路漫漫其修远兮，吾将上下而求索。——屈原",
+  "胜利属于最坚忍的人。——拿破仑",
+  "合理安排时间，就等于节约时间。——培根",
+  "知识就是力量。——培根",
+  "生活的理想，就是为了理想的生活。——张闻天",
+  "书山有路勤为径，学海无涯苦作舟。——韩愈",
+];
+
 const PAGE_SIZE = 50;
 const STORAGE_KEY = "zodiac-sudoku-progress-v1";
 const BASE_GRID = "123456789456789123789123456234567891567891234891234567345678912678912345912345678";
 
 const els = {
   totalSolved: document.getElementById("totalSolved"),
+  dailyQuote: document.getElementById("dailyQuote"),
   masterSolved: document.getElementById("masterSolved"),
   resetProgressBtn: document.getElementById("resetProgressBtn"),
   libraryView: document.getElementById("libraryView"),
@@ -175,9 +191,15 @@ function switchView(view) {
 }
 
 function render() {
+  renderDailyQuote();
   renderProgress();
   renderLibrary();
   renderZodiac();
+}
+
+function renderDailyQuote() {
+  const day = Math.floor(Date.now() / 86400000);
+  els.dailyQuote.textContent = DAILY_QUOTES[day % DAILY_QUOTES.length];
 }
 
 function renderProgress() {
