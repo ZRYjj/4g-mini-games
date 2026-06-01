@@ -3,57 +3,116 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>四合一单机小游戏</title>
+    <title>星座数独</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <main class="app">
-      <header class="topbar">
+      <header class="hero">
         <div>
-          <p class="eyebrow">本地单机 · 打开即玩</p>
-          <h1>四合一小游戏</h1>
+          <p class="eyebrow">1500题 · 单机进度 · 星座解锁</p>
+          <h1>星座数独</h1>
+          <p class="intro">保留 9 宫格数独，把题库、难度选择和十二星座挑战做成完整玩法。</p>
         </div>
-        <div class="stats" aria-live="polite">
-          <span id="moveCount">步数 0</span>
-          <span id="gameStatus">选择一个游戏开始</span>
-        </div>
+        <section class="profile" aria-live="polite">
+          <strong id="totalSolved">已通关 0</strong>
+          <span id="masterSolved">大师 0 / 10 解锁星座</span>
+          <button id="resetProgressBtn" type="button">清空进度</button>
+        </section>
       </header>
 
-      <nav class="game-tabs" aria-label="游戏列表">
-        <button class="tab active" data-game="sudoku">数独9宫格</button>
-        <button class="tab" data-game="rush">通关大师</button>
-        <button class="tab" data-game="slide">拼来拼去</button>
-        <button class="tab" data-game="water">倒水解谜</button>
+      <nav class="main-tabs" aria-label="玩法导航">
+        <button class="nav-tab active" data-view="library">题库模式</button>
+        <button class="nav-tab" data-view="zodiac">十二星座</button>
       </nav>
 
-      <section class="game-shell">
-        <aside class="game-info">
-          <h2 id="gameTitle">数独9宫格</h2>
-          <p id="gameDesc">填入 1-9，让每一行、每一列、每个 3x3 宫都没有重复数字。</p>
-          <div class="actions">
-            <button id="newGameBtn" type="button">新一局</button>
-            <button id="resetBtn" type="button">重置</button>
-            <button id="hintBtn" type="button">提示</button>
+      <section id="libraryView" class="view active">
+        <div class="mode-grid">
+          <button class="mode-card active" data-difficulty="easy">
+            <span>简单版</span>
+            <strong>500题</strong>
+            <small id="easyCount">已通关 0 / 500</small>
+          </button>
+          <button class="mode-card" data-difficulty="normal">
+            <span>普通版</span>
+            <strong>500题</strong>
+            <small id="normalCount">已通关 0 / 500</small>
+          </button>
+          <button class="mode-card" data-difficulty="master">
+            <span>大师版</span>
+            <strong>500题</strong>
+            <small id="masterCount">已通关 0 / 500</small>
+          </button>
+        </div>
+
+        <section class="panel">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">自由选题</p>
+              <h2 id="libraryTitle">简单版题库</h2>
+            </div>
+            <div class="pager">
+              <button id="prevPageBtn" type="button">上一页</button>
+              <span id="pageLabel">1 / 10</span>
+              <button id="nextPageBtn" type="button">下一页</button>
+            </div>
           </div>
-          <div class="note" id="gameNote">点击空格输入数字，完成后点“提示”会补一个格子。</div>
+          <div class="puzzle-list" id="puzzleList"></div>
+        </section>
+      </section>
+
+      <section id="zodiacView" class="view">
+        <section class="panel zodiac-panel">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">大师试炼</p>
+              <h2>十二星座图案玩法</h2>
+            </div>
+            <span class="unlock-pill" id="zodiacUnlockText">通关 10 个大师版后解锁</span>
+          </div>
+          <p class="zodiac-desc">每个星座都是一个 3x3 矩阵，9 个锁分别对应 9 局数独，随机搭配简单版、普通版和大师版。全部解锁后显示对应星座图案。</p>
+          <div class="zodiac-layout">
+            <div class="zodiac-list" id="zodiacList"></div>
+            <div class="zodiac-detail" id="zodiacDetail"></div>
+          </div>
+        </section>
+      </section>
+
+      <section id="gameView" class="game-view" hidden>
+        <aside class="game-side">
+          <button id="backBtn" type="button" class="ghost-btn">返回题库</button>
+          <h2 id="gameTitle">简单版 第1题</h2>
+          <p id="gameMeta">步数 0 · 用时 00:00</p>
+          <div class="game-actions">
+            <button id="hintBtn" type="button">提示</button>
+            <button id="eraseBtn" type="button">擦除</button>
+            <button id="restartBtn" type="button">重开本题</button>
+          </div>
+          <div class="note" id="gameNote">点击空格后，用下方数字键填入答案。</div>
         </aside>
 
-        <section class="board-wrap" id="boardWrap" aria-live="polite"></section>
+        <section class="sudoku-stage">
+          <div class="sudoku-top">
+            <span id="mistakeText">错误：0 / 3</span>
+            <span id="statusText">继续思考</span>
+          </div>
+          <div class="sudoku-board" id="sudokuBoard"></div>
+          <div class="number-pad" id="numberPad"></div>
+        </section>
       </section>
     </main>
 
     <div class="win-modal" id="winModal" hidden>
       <div class="win-backdrop"></div>
       <section class="win-card" role="dialog" aria-modal="true" aria-labelledby="winTitle">
-        <div class="confetti" aria-hidden="true">
-          <span></span><span></span><span></span><span></span><span></span><span></span>
-        </div>
-        <div class="win-car" aria-hidden="true">🚕</div>
-        <div class="win-ribbon"><strong>WIN</strong></div>
-        <div class="win-face" aria-hidden="true">😄</div>
+        <div class="sparkles" aria-hidden="true"></div>
+        <strong class="win-badge">WIN</strong>
         <h2 id="winTitle">通关成功</h2>
-        <p id="winText">这一局完成得漂亮。</p>
-        <button id="winCloseBtn" type="button">继续玩</button>
+        <p id="winText">这一题完成得漂亮。</p>
+        <div class="modal-actions">
+          <button id="nextPuzzleBtn" type="button">下一题</button>
+          <button id="winCloseBtn" type="button">回到列表</button>
+        </div>
       </section>
     </div>
 
